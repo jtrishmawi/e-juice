@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -22,12 +21,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { Batch, BatchType } from "@/models/Batch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Bottle } from "./bottle";
-import { Batch, BatchType } from "@/models/Batch";
 
 const formSchema = z.object({
   batch_volume: z.coerce.number(),
@@ -67,14 +66,7 @@ export const Calculator = () => {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const batch = Batch({
-      batch_volume: data.batch_volume,
-      base_vg_percentage: data.base_vg_percentage,
-      batch_nicotin_concentration: data.batch_nicotin_concentration,
-      nicotin_concentration: data.nicotin_concentration,
-      nicotin_vg_percentage: data.nicotin_vg_percentage,
-      flavors: data.flavors,
-    });
+    const batch = Batch(data);
     setResult(batch);
     console.log(batch);
   };
