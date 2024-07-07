@@ -7,11 +7,13 @@ export const Bottle = ({
   nicotine,
   aroma,
   volume,
+  className,
 }: {
   base: number;
   nicotine: number;
   aroma: number;
   volume: number;
+  className?: string;
 }) => {
   const totalLiquids = base + nicotine + aroma;
   const totalHeight = volume * (96 / 80);
@@ -22,7 +24,12 @@ export const Bottle = ({
   const isOverfilled = totalLiquids > volume;
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div
+      className={cn(
+        "flex justify-center items-center h-full bg-gray-100 p-8 rounded-sm",
+        className
+      )}
+    >
       <div className="relative w-40 h-96">
         <div className="absolute top-0 w-full h-12 bg-gray-800 rounded-t-full shadow-inner z-10"></div>
         <div className="absolute top-12 w-full h-4 bg-gray-600 shadow-inner z-10"></div>
