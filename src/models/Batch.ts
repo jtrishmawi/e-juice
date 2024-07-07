@@ -28,7 +28,7 @@ class BatchInstance {
     batch_nicotin_concentration = 6,
     nicotin_concentration = 20,
     nicotin_vg_percentage = 50,
-    flavors,
+    flavors = [{ name: "Arome 1", dosage: 11, vg_percentage: 50 }],
   }: BatchConstructor) {
     this._volume = batch_volume;
     this.nicotin_concentration = batch_nicotin_concentration;

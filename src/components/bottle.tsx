@@ -1,27 +1,22 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Batch, BatchType } from "@/models/Batch";
 
-export const Bottle = ({
-  base,
-  nicotine,
-  aroma,
-  volume,
-  className,
-}: {
-  base: number;
-  nicotine: number;
-  aroma: number;
-  volume: number;
+type BottleProps = {
+  batch?: BatchType;
   className?: string;
-}) => {
-  const totalLiquids = base + nicotine + aroma;
-  const totalHeight = volume * (96 / 80);
-  const baseHeight = (base / totalHeight) * 100;
-  const nicotineHeight = (nicotine / totalHeight) * 100;
-  const aromaHeight = (aroma / totalHeight) * 100;
+};
 
-  const isOverfilled = totalLiquids > volume;
+export const Bottle = ({ className, batch = Batch({}) }: BottleProps) => {
+  const totalLiquids =
+    batch.volume.base + batch.volume.boost + batch.volume.flavors;
+  const totalHeight = batch.volume.total * (96 / 80);
+  const baseHeight = (batch.volume.base / totalHeight) * 100;
+  const nicotineHeight = (batch.volume.boost / totalHeight) * 100;
+  const aromaHeight = (batch.volume.flavors / totalHeight) * 100;
+
+  const isOverfilled = totalLiquids > batch.volume.total;
 
   return (
     <div
@@ -36,7 +31,7 @@ export const Bottle = ({
         <div className="absolute top-16 w-full h-80 bg-gray-200 rounded-b-lg shadow-inner z-0"></div>
         <div
           className={cn(
-            "absolute bottom-0 w-full bg-blue-500",
+            "absolute bottom-0 w-full hover:opacity-80 bg-blue-500",
             isOverfilled && "filter grayscale"
           )}
           style={{
@@ -46,7 +41,7 @@ export const Bottle = ({
         ></div>
         <div
           className={cn(
-            "absolute bottom-0 w-full bg-red-500",
+            "absolute bottom-0 w-full hover:opacity-80 bg-red-500",
             isOverfilled && "filter grayscale"
           )}
           style={{ height: `${nicotineHeight}%`, bottom: `${baseHeight}%` }}
@@ -54,7 +49,7 @@ export const Bottle = ({
         ></div>
         <div
           className={cn(
-            "absolute bottom-0 w-full bg-yellow-500",
+            "absolute bottom-0 w-full hover:opacity-80 bg-yellow-500",
             isOverfilled && "filter grayscale"
           )}
           style={{
@@ -73,9 +68,9 @@ export const Bottle = ({
           ) : (
             <>
               <p className="text-center text-gray-800 font-bold">Mon Liquide</p>
-              <p className="text-center text-gray-700 text-sm">{`Base: ${base}ml`}</p>
-              <p className="text-center text-gray-700 text-sm">{`Nicotine: ${nicotine}ml`}</p>
-              <p className="text-center text-gray-700 text-sm">{`Aromes: ${aroma}ml`}</p>
+              <p className="text-center text-sm text-yellow-500">{`Base: ${batch.volume.base}ml`}</p>
+              <p className="text-center text-sm text-red-500">{`Nicotine: ${batch.volume.boost}ml`}</p>
+              <p className="text-center text-sm text-blue-500">{`Aromes: ${batch.volume.flavors}ml`}</p>
             </>
           )}
         </div>

@@ -48,7 +48,7 @@ const formSchema = z.object({
 
 export const Calculator = () => {
   const [isSimpleMode, setIsSimpleMode] = useState(true);
-  const [result, setResult] = useState<BatchType | null>(null);
+  const [result, setResult] = useState<BatchType>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -139,10 +139,7 @@ export const Calculator = () => {
           </Card>
           <Bottle
             className="row-span-2 order-first lg:-order-none"
-            volume={result?.volume.total || 0}
-            base={result?.volume.base || 0}
-            nicotine={result?.volume.boost || 0}
-            aroma={result?.volume.flavors || 0}
+            batch={result}
           />
           <Card>
             <CardHeader>
