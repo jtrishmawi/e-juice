@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Bottle } from "./bottle";
+import { CircleX, PlusCircle } from "lucide-react";
 
 const formSchema = z.object({
   batch_volume: z.coerce.number(),
@@ -187,6 +188,7 @@ export const Calculator = () => {
                   {fields.length !== 1 && (
                     <Button
                       variant="destructive"
+                      size="icon"
                       onClick={() => remove(index)}
                       className={cn(
                         form.formState.errors.flavors?.[index]
@@ -194,12 +196,13 @@ export const Calculator = () => {
                           : "self-end"
                       )}
                     >
-                      Supprimer
+                      <CircleX />
                     </Button>
                   )}
                   {index === fields.length - 1 && (
                     <Button
-                      variant={"outline"}
+                      variant="outline"
+                      size="icon"
                       onClick={() =>
                         append({
                           name: `Arome ${fields.length + 1}`,
@@ -213,7 +216,7 @@ export const Calculator = () => {
                           : "self-end"
                       )}
                     >
-                      Ajouter
+                      <PlusCircle />
                     </Button>
                   )}
                 </div>
