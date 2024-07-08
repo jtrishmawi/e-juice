@@ -100,7 +100,7 @@ export const Calculator = () => {
                 veuillez renseigner ces informations
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
               <FormField
                 control={form.control}
                 name="batch_volume"
@@ -110,6 +110,7 @@ export const Calculator = () => {
                     <FormControl>
                       <Input type="number" placeholder="70" {...field} />
                     </FormControl>
+                    <FormDescription>exprime en mL</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -141,9 +142,9 @@ export const Calculator = () => {
                 vous pouvez ajouter, modifier ou supprimez des aromes
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
               {fields.map((field, index) => (
-                <div key={field.id} className="flex gap-2 items-start">
+                <div key={field.id} className="flex gap-2 items-end">
                   <FormField
                     control={form.control}
                     name={`flavors.${index}.name`}
@@ -185,40 +186,42 @@ export const Calculator = () => {
                       )}
                     />
                   )}
-                  {fields.length !== 1 && (
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => remove(index)}
-                      className={cn(
-                        form.formState.errors.flavors?.[index]
-                          ? "self-center"
-                          : "self-end"
-                      )}
-                    >
-                      <CircleX />
-                    </Button>
-                  )}
-                  {index === fields.length - 1 && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() =>
-                        append({
-                          name: `Arome ${fields.length + 1}`,
-                          dosage: 0,
-                          vg_percentage: 50,
-                        })
-                      }
-                      className={cn(
-                        form.formState.errors.flavors?.[index]
-                          ? "self-center"
-                          : "self-end"
-                      )}
-                    >
-                      <PlusCircle />
-                    </Button>
-                  )}
+                  <div className="flex-1 flex gap-2">
+                    {fields.length !== 1 && (
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={() => remove(index)}
+                        className={cn(
+                          form.formState.errors.flavors?.[index]
+                            ? "self-center"
+                            : "self-end"
+                        )}
+                      >
+                        <CircleX />
+                      </Button>
+                    )}
+                    {index === fields.length - 1 && (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() =>
+                          append({
+                            name: `Arome ${fields.length + 1}`,
+                            dosage: 0,
+                            vg_percentage: 50,
+                          })
+                        }
+                        className={cn(
+                          form.formState.errors.flavors?.[index]
+                            ? "self-center"
+                            : "self-end"
+                        )}
+                      >
+                        <PlusCircle />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               ))}
             </CardContent>
@@ -230,7 +233,7 @@ export const Calculator = () => {
                   <CardTitle>Ma base</CardTitle>
                   <CardDescription>plus de details sur la base</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-6">
                   <FormField
                     control={form.control}
                     name="base_vg_percentage"
@@ -254,7 +257,7 @@ export const Calculator = () => {
                     plus de details sur le booster
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-6">
                   <FormField
                     control={form.control}
                     name="nicotin_concentration"
