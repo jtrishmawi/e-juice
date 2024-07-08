@@ -23,11 +23,11 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { Batch, BatchType } from "@/models/Batch";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleX, CogIcon, FeatherIcon, PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Bottle } from "./bottle";
-import { CircleX, PlusCircle } from "lucide-react";
 
 const formSchema = z.object({
   batch_volume: z.coerce.number(),
@@ -85,8 +85,17 @@ export const Calculator = () => {
           id="simple-mode"
           checked={isSimpleMode}
           onCheckedChange={setIsSimpleMode}
+          checkedIcon={
+            <FeatherIcon className="h-6 w-6 data-[state=checked]:translate-x-7 p-0.5" />
+          }
+          uncheckedIcon={
+            <CogIcon className="h-6 w-6 data-[state=checked]:translate-x-7 p-0.5" />
+          }
+          className="h-8 w-14"
         />
-        <Label htmlFor="simple-mode">Mode Facile</Label>
+        <Label htmlFor="simple-mode">
+          Mode {isSimpleMode ? "simple" : "avance"}
+        </Label>
       </div>
       <Form {...form}>
         <form
@@ -144,7 +153,10 @@ export const Calculator = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               {fields.map((field, index) => (
-                <div key={field.id} className="flex gap-2 items-end">
+                <div
+                  key={field.id}
+                  className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end border border-accent rounded-sm p-4"
+                >
                   <FormField
                     control={form.control}
                     name={`flavors.${index}.name`}
@@ -186,7 +198,7 @@ export const Calculator = () => {
                       )}
                     />
                   )}
-                  <div className="flex-1 flex gap-2">
+                  <div className="flex-1 flex gap-2 justify-end">
                     {fields.length !== 1 && (
                       <Button
                         variant="destructive"
