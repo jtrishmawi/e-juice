@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Bottle } from "./bottle";
+import { Fieldset } from "./ui/fieldset";
 
 const formSchema = z.object({
   batch_volume: z.coerce.number(),
@@ -91,80 +92,83 @@ export const Calculator = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="grid gap-8 md:grid-cols-2 lg:grid-rows-3"
         >
-          <Card>
-            <CardHeader>
-              <CardTitle>Ma recette</CardTitle>
-              <CardDescription>
-                veuillez renseigner ces informations
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <FormField
-                control={form.control}
-                name="batch_volume"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Taille de votre bouteille</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="70" {...field} />
-                    </FormControl>
-                    <FormDescription>exprime en mL</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="batch_nicotin_concentration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Quantite de nicotine requise</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="6" {...field} />
-                    </FormControl>
-                    <FormDescription>exprime en mg/mL</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
+          <Fieldset
+            title="Ma recette"
+            description="veuillez renseigner ces informations"
+          >
+            <FormField
+              control={form.control}
+              name="batch_volume"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Taille de votre bouteille</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="70" {...field} />
+                  </FormControl>
+                  <FormDescription>exprime en mL</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="batch_nicotin_concentration"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantite de nicotine requise</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="6" {...field} />
+                  </FormControl>
+                  <FormDescription>exprime en mg/mL</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </Fieldset>
           <Bottle
             batch={result}
             className="row-span-1 lg:row-span-2 order-first md:-order-none"
           />
-          <Card>
-            <CardHeader>
-              <CardTitle>Aromes</CardTitle>
-              <CardDescription>
-                vous pouvez ajouter, modifier ou supprimez des aromes
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {fields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end border border-accent rounded-sm p-4"
-                >
+
+          <Fieldset title="Aromes" description="ajoutez des aromes">
+            {fields.map((field, index) => (
+              <div
+                key={field.id}
+                className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end border border-accent rounded-sm p-4"
+              >
+                <FormField
+                  control={form.control}
+                  name={`flavors.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nom de l&apos;arome</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`flavors.${index}.dosage`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dosage en %</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {!isSimpleMode && (
                   <FormField
                     control={form.control}
-                    name={`flavors.${index}.name`}
+                    name={`flavors.${index}.vg_percentage`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nom de l&apos;arome</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`flavors.${index}.dosage`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Dosage en %</FormLabel>
+                        <FormLabel>VG en %</FormLabel>
                         <FormControl>
                           <Input type="number" {...field} />
                         </FormControl>
@@ -172,127 +176,104 @@ export const Calculator = () => {
                       </FormItem>
                     )}
                   />
-                  {!isSimpleMode && (
-                    <FormField
-                      control={form.control}
-                      name={`flavors.${index}.vg_percentage`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>VG en %</FormLabel>
-                          <FormControl>
-                            <Input type="number" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                )}
+                <div className="flex-1 flex gap-2 justify-end">
+                  {fields.length !== 1 && (
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => remove(index)}
+                      className={cn(
+                        form.formState.errors.flavors?.[index]
+                          ? "self-center"
+                          : "self-end"
                       )}
-                    />
+                    >
+                      <CircleX />
+                    </Button>
                   )}
-                  <div className="flex-1 flex gap-2 justify-end">
-                    {fields.length !== 1 && (
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => remove(index)}
-                        className={cn(
-                          form.formState.errors.flavors?.[index]
-                            ? "self-center"
-                            : "self-end"
-                        )}
-                      >
-                        <CircleX />
-                      </Button>
-                    )}
-                    {index === fields.length - 1 && (
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() =>
-                          append({
-                            name: `Arome ${fields.length + 1}`,
-                            dosage: 0,
-                            vg_percentage: 50,
-                          })
-                        }
-                        className={cn(
-                          form.formState.errors.flavors?.[index]
-                            ? "self-center"
-                            : "self-end"
-                        )}
-                      >
-                        <PlusCircle />
-                      </Button>
-                    )}
-                  </div>
+                  {index === fields.length - 1 && (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() =>
+                        append({
+                          name: `Arome ${fields.length + 1}`,
+                          dosage: 0,
+                          vg_percentage: 50,
+                        })
+                      }
+                      className={cn(
+                        form.formState.errors.flavors?.[index]
+                          ? "self-center"
+                          : "self-end"
+                      )}
+                    >
+                      <PlusCircle />
+                    </Button>
+                  )}
                 </div>
-              ))}
-            </CardContent>
-          </Card>
+              </div>
+            ))}
+          </Fieldset>
           {!isSimpleMode && (
             <>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Ma base</CardTitle>
-                  <CardDescription>plus de details sur la base</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="base_vg_percentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Pourcentage en VG de la base</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="50" {...field} />
-                        </FormControl>
-                        <FormDescription>exprime en %</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Booster de nicotine</CardTitle>
-                  <CardDescription>
-                    plus de details sur le booster
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="nicotin_concentration"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Concentration du booster de nicotine
-                        </FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="20" {...field} />
-                        </FormControl>
-                        <FormDescription>exprime en mg/mL</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="nicotin_vg_percentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          Pourcentage en VG du booster de nicotine
-                        </FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="50" {...field} />
-                        </FormControl>
-                        <FormDescription>exprime en %</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-              </Card>
+              <Fieldset
+                title="Ma Base"
+                description="plus de details sur la base"
+              >
+                <FormField
+                  control={form.control}
+                  name="base_vg_percentage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Pourcentage en VG de la base</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="50" {...field} />
+                      </FormControl>
+                      <FormDescription>exprime en %</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </Fieldset>
+              <Fieldset
+                title="Booster de nicotine"
+                description="plus de details sur le booster"
+              >
+                <FormField
+                  control={form.control}
+                  name="nicotin_concentration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Concentration du booster de nicotine
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="20" {...field} />
+                      </FormControl>
+                      <FormDescription>exprime en mg/mL</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="nicotin_vg_percentage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Pourcentage en VG du booster de nicotine
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="50" {...field} />
+                      </FormControl>
+                      <FormDescription>exprime en %</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </Fieldset>
             </>
           )}
         </form>
