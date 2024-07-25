@@ -89,7 +89,7 @@ export const Calculator = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid gap-8 lg:grid-cols-2 lg:grid-rows-3"
+          className="grid gap-8 md:grid-cols-2 lg:grid-rows-3"
         >
           <Card>
             <CardHeader>
@@ -130,8 +130,8 @@ export const Calculator = () => {
             </CardContent>
           </Card>
           <Bottle
-            className="row-span-2 order-first lg:-order-none"
             batch={result}
+            className="row-span-1 lg:row-span-2 order-first md:-order-none"
           />
           <Card>
             <CardHeader>
