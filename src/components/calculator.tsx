@@ -18,12 +18,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { Batch, BatchType } from "@/models/Batch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CircleX, CogIcon, FeatherIcon, PlusCircle } from "lucide-react";
+import { CircleX, PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,21 +79,12 @@ export const Calculator = () => {
   return (
     <>
       <div className="flex items-center justify-end space-x-2 py-2">
-        <Switch
-          id="simple-mode"
-          checked={isSimpleMode}
-          onCheckedChange={setIsSimpleMode}
-          checkedIcon={
-            <FeatherIcon className="h-6 w-6 data-[state=checked]:translate-x-7 p-0.5" />
-          }
-          uncheckedIcon={
-            <CogIcon className="h-6 w-6 data-[state=checked]:translate-x-7 p-0.5" />
-          }
-          className="h-8 w-14"
-        />
-        <Label htmlFor="simple-mode">
-          Mode {isSimpleMode ? "simple" : "avance"}
-        </Label>
+        <Button
+          onClick={() => setIsSimpleMode(!isSimpleMode)}
+          variant="outline"
+        >
+          {isSimpleMode ? "Mode avance" : "Mode simple"}
+        </Button>
       </div>
       <Form {...form}>
         <form
