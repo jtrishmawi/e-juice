@@ -130,7 +130,7 @@ export const Calculator = () => {
           </Fieldset>
           <Bottle
             batch={result}
-            className="row-span-1 lg:row-span-2 order-first md:-order-none"
+            className="row-span-1 lg:row-span-2 order-first md:order-none"
           />
 
           <Fieldset title="Aromes" description="ajoutez des aromes">
