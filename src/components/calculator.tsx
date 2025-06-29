@@ -1,6 +1,8 @@
 "use client";
 
+import { Bottle } from "@/components/bottle";
 import { Button } from "@/components/ui/button";
+import { Fieldset } from "@/components/ui/fieldset";
 import {
   Form,
   FormControl,
@@ -18,8 +20,6 @@ import { CircleX, PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Bottle } from "./bottle";
-import { Fieldset } from "./ui/fieldset";
 
 const formSchema = z.object({
   batch_volume: z.coerce.number(),
@@ -31,7 +31,7 @@ const formSchema = z.object({
     .object({
       name: z
         .string()
-        .min(3, { message: "Name must be at least 3 characters" }),
+        .min(3, { message: "Le nom doit comporter au moins 3 caractères." }),
       dosage: z.coerce.number(),
       vg_percentage: z.coerce.number(),
     })
@@ -53,22 +53,32 @@ export const Calculator = () => {
     },
   });
 
+  const { control, handleSubmit, formState, subscribe } = form;
+
   const { fields, append, remove } = useFieldArray({
-    control: form.control,
+    control,
     name: "flavors",
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     const batch = Batch(data);
-    setResult(batch);
     console.log(batch);
   };
 
   useEffect(() => {
-    form.handleSubmit(onSubmit)();
-    const watcher = form.watch(() => form.handleSubmit(onSubmit)());
-    return () => watcher.unsubscribe();
-  }, [form]);
+    const callback = subscribe({
+      formState: {
+        values: true,
+      },
+      callback: ({ values }) => {
+        const batch = Batch(values);
+        setResult(batch);
+        console.log(batch);
+      },
+    });
+
+    return () => callback();
+  }, [subscribe]);
 
   return (
     <>
@@ -82,7 +92,7 @@ export const Calculator = () => {
       </div>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className="grid gap-8 md:grid-cols-2 lg:grid-rows-3"
         >
           <Fieldset
@@ -90,7 +100,7 @@ export const Calculator = () => {
             description="veuillez renseigner ces informations"
           >
             <FormField
-              control={form.control}
+              control={control}
               name="batch_volume"
               render={({ field }) => (
                 <FormItem>
@@ -104,7 +114,7 @@ export const Calculator = () => {
               )}
             />
             <FormField
-              control={form.control}
+              control={control}
               name="batch_nicotin_concentration"
               render={({ field }) => (
                 <FormItem>
@@ -130,7 +140,7 @@ export const Calculator = () => {
                 className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end border border-accent rounded-sm p-4"
               >
                 <FormField
-                  control={form.control}
+                  control={control}
                   name={`flavors.${index}.name`}
                   render={({ field }) => (
                     <FormItem>
@@ -143,7 +153,7 @@ export const Calculator = () => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={control}
                   name={`flavors.${index}.dosage`}
                   render={({ field }) => (
                     <FormItem>
@@ -157,7 +167,7 @@ export const Calculator = () => {
                 />
                 {!isSimpleMode && (
                   <FormField
-                    control={form.control}
+                    control={control}
                     name={`flavors.${index}.vg_percentage`}
                     render={({ field }) => (
                       <FormItem>
@@ -177,7 +187,7 @@ export const Calculator = () => {
                       size="icon"
                       onClick={() => remove(index)}
                       className={cn(
-                        form.formState.errors.flavors?.[index]
+                        formState.errors.flavors?.[index]
                           ? "self-center"
                           : "self-end"
                       )}
@@ -197,7 +207,7 @@ export const Calculator = () => {
                         })
                       }
                       className={cn(
-                        form.formState.errors.flavors?.[index]
+                        formState.errors.flavors?.[index]
                           ? "self-center"
                           : "self-end"
                       )}
@@ -216,7 +226,7 @@ export const Calculator = () => {
                 description="plus de details sur la base"
               >
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="base_vg_percentage"
                   render={({ field }) => (
                     <FormItem>
@@ -235,7 +245,7 @@ export const Calculator = () => {
                 description="plus de details sur le booster"
               >
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="nicotin_concentration"
                   render={({ field }) => (
                     <FormItem>
@@ -251,7 +261,7 @@ export const Calculator = () => {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="nicotin_vg_percentage"
                   render={({ field }) => (
                     <FormItem>
