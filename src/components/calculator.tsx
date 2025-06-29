@@ -19,21 +19,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleX, PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 const formSchema = z.object({
-  batch_volume: z.coerce.number(),
-  batch_nicotin_concentration: z.coerce.number(),
-  base_vg_percentage: z.coerce.number(),
-  nicotin_concentration: z.coerce.number(),
-  nicotin_vg_percentage: z.coerce.number(),
+  batch_volume: z.int(),
+  batch_nicotin_concentration: z.int(),
+  base_vg_percentage: z.int(),
+  nicotin_concentration: z.int(),
+  nicotin_vg_percentage: z.int(),
   flavors: z
     .object({
       name: z
         .string()
-        .min(3, { message: "Le nom doit comporter au moins 3 caractères." }),
-      dosage: z.coerce.number(),
-      vg_percentage: z.coerce.number(),
+        .min(3, { error: "Le nom doit comporter au moins 3 caractères." }),
+      dosage: z.int(),
+      vg_percentage: z.int(),
     })
     .array(),
 });
