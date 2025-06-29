@@ -23,12 +23,12 @@ class BatchInstance {
   flavors: Flavor[] = [];
 
   constructor({
-    batch_volume = 70,
+    batch_volume = 75,
     base_vg_percentage = 50,
-    batch_nicotin_concentration = 6,
+    batch_nicotin_concentration = 3,
     nicotin_concentration = 20,
     nicotin_vg_percentage = 50,
-    flavors = [{ name: "Arome 1", dosage: 11, vg_percentage: 50 }],
+    flavors = [{ name: "Arome 1", dosage: 14, vg_percentage: 50 }],
   }: BatchConstructor) {
     this._volume = batch_volume;
     this.nicotin_concentration = batch_nicotin_concentration;

@@ -2,13 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormDescription,
@@ -51,12 +44,12 @@ export const Calculator = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      batch_volume: 70,
-      batch_nicotin_concentration: 6,
+      batch_volume: 75,
+      batch_nicotin_concentration: 3,
       base_vg_percentage: 50,
       nicotin_concentration: 20,
       nicotin_vg_percentage: 50,
-      flavors: [{ name: "Arome 1", dosage: 11, vg_percentage: 50 }],
+      flavors: [{ name: "Arome 1", dosage: 14, vg_percentage: 50 }],
     },
   });
 
