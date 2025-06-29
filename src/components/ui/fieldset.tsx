@@ -1,29 +1,21 @@
 "use client";
 
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { ChevronDownIcon } from "lucide-react";
 import { ReactNode } from "react";
+import { Button } from "./button";
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from "./card";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-} from "./form";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./collapsible";
-import { Button } from "./button";
-import { ChevronDownIcon } from "lucide-react";
 
 type FieldsetProps = {
   title: string;
@@ -50,7 +42,7 @@ const Fieldset = ({ title, description, children }: FieldsetProps) => {
         <h4 className="text-base font-semibold">{title}</h4>
         <CollapsibleTrigger asChild>
           <Button variant="ghost" size="icon">
-            <ChevronDownIcon className="h-5 w-5 transition-transform duration-300 group-open:-rotate-180" />
+            <ChevronDownIcon className="size-5 transition-transform duration-300 group-open:-rotate-180" />
           </Button>
         </CollapsibleTrigger>
       </div>
@@ -65,3 +57,4 @@ const Fieldset = ({ title, description, children }: FieldsetProps) => {
 Fieldset.displayName = "Fieldset";
 
 export { Fieldset };
+
